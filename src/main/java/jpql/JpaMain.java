@@ -16,44 +16,46 @@ public class JpaMain {
         tx.begin();
 
         try {
-            Team team = new Team();
-            team.setName("팀A");
-            em.persist(team);
+            Team teamA = new Team();
+            teamA.setName("팀A");
+            em.persist(teamA);
 
             Team teamB = new Team();
             teamB.setName("팀B");
-            em.persist(team);
-
-            Member member = new Member();
-            member.setUsername("회원1");
-            member.setTeam(team);
-            member.changeTeam(team);
-            em.persist(member);
+            em.persist(teamB);
 
             Member member1 = new Member();
-            member1.setUsername("회원2");
-            member1.setTeam(team);
-            member1.changeTeam(team);
+            member1.setUsername("회원1");
+            member1.setTeam(teamA);
             em.persist(member1);
 
             Member member2 = new Member();
-            member2.setUsername("회원3");
-            member2.setTeam(team);
-            member2.changeTeam(team);
+            member2.setUsername("회원2");
+            member2.setTeam(teamA);
             em.persist(member2);
+
+            Member member3 = new Member();
+            member3.setUsername("회원3");
+            member3.setTeam(teamB);
+            em.persist(member3);
 
             em.flush();
             em.clear();
 
-            String query = "select t from Team t join fetch t.members";
+            String query = "select t from Team t";
 
 
-            List<Team> result = em.createQuery(query, Team.class).getResultList();
+            List<Team> resultList = em.createQuery(query, Team.class)
+                    .setFirstResult(0)
+                    .setMaxResults(2)
+                    .getResultList();
 
-            for (Team team1 : result) {
-                System.out.println("team  = " + team1.getName() + "|members=" + team1.getMembers().size());
-                for (Member member3 : team1.getMembers()) {
-                    System.out.println("-> member3 = " + member3);
+            System.out.println("resultList.size() = " + resultList.size());
+
+            for (Team team : resultList) {
+                System.out.println("team = " + team.getName() + "|members=" + team.getMembers().size());
+                for (Member member : team.getMembers()) {
+                    System.out.println("-> member = " + member);
                 }
             }
 

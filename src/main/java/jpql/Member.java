@@ -2,12 +2,15 @@ package jpql;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
+import org.apache.commons.lang3.builder.ToStringExclude;
 
 import javax.persistence.*;
 
 @Entity
 @Getter
 @Setter
+@ToString(exclude = {"team", "memberType"})
 public class Member {
 
     @Id

@@ -11,6 +11,10 @@ import javax.persistence.*;
 @Getter
 @Setter
 @ToString(exclude = {"team", "memberType"})
+@NamedQuery(
+        name = "Member.findByUsername",
+        query = "select m from Member m where m.username = :username"
+)
 public class Member {
 
     @Id
